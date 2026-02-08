@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favourite Person ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #fff0f3;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            width: 100%;
+        }
+
+        #main-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 20px;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            padding: 0 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            height: 100px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            position: relative; /* Starts visible in the flow */
+            transition: all 0.1s ease;
+        }
+
+        #message-box {
+            margin-top: 50px;
+            color: #ff4d6d;
+            font-style: italic;
+            font-weight: 600;
+            min-height: 30px;
+        }
+
+        #success-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: white;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        #success-screen img {
+            width: 320px;
+            max-width: 85%;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .congrats-text {
+            color: #ff4d6d;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            white-space: pre-line; /* Keeps line breaks */
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="game-area">
+        <img id="main-photo" src="https://drive.google.com/thumbnail?id=1-csTkLRFqdPXfZYqPHVTCuqRz0x0tMjd&sz=w1000" alt="First Photo">
+        
+        <h1>Will you be my Valentine? ❤️</h1>
+
+        <div class="btn-group">
+            <button id="yesBtn" onclick="celebrate()">YES</button>
+            <button id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
+        </div>
+
+        <p id="message-box"></p>
+    </div>
+
+    <div id="success-screen">
+        <h1 style="font-size: 2.5rem; color: #ff4d6d;">Yay!! It's official you are mine😍😘!!</h1>
+        <img src="https://drive.google.com/thumbnail?id=1dd7kekqDc83hL-nJQTbWIpgZixVY8Cyd&sz=w1000" alt="Us Together">
+        <div class="congrats-text">
+            I knew that you would accept me my dear
+            I love you to the moon and back🥰❤️😘
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainImg = document.getElementById('main-photo');
+        const msgBox = document.getElementById('message-box');
+
+        // Other 3 photos to alternate
+        const otherPhotos = [
+            "https://drive.google.com/thumbnail?id=1hU4yG-gZ2r-M6J1fA7CNRsVPzNYwCuGk&sz=w1000",
+            "https://drive.google.com/thumbnail?id=1v62myOMx0timbM1urCD6pfrKm1DATr8P&sz=w1000",
+            "https://drive.google.com/thumbnail?id=1DtKbi9dLeZiXrS92QCcrOG_U495pNoEC&sz=w1000"
+        ];
+
+        const messages = [
+            "Wait, did the button move?",
+            "You're getting closer... maybe?",
+            "Look at this face, how can you say no?",
+            "I'll keep moving if you keep trying!",
+            "Give up yet? The Green button is right there!",
+            "Are you really sure? 🥺",
+            "Think about the memories! ✨",
+            "I'll be the best valentine ever! ❤️",
+            "Look at my face! How could you? 😂",
+            "Error: 'No' is not a valid answer."
+        ];
+
+        let count = 0;
+
+        function dodge() {
+            count++;
+
+            // Transform No button to absolute position so it can jump anywhere
+            noBtn.style.position = 'fixed';
+            
+            // Calculate random position while keeping it inside the window
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Change Photo (skips the first one, cycles the others)
+            mainImg.src = otherPhotos[count % otherPhotos.length];
+
+            // Change Message
+            msgBox.innerText = messages[count % messages.length];
+
+            // Make YES grow
+            yesBtn.style.transform = `scale(${1 + (count * 0.1)})`;
+        }
+
+        function celebrate() {
+            document.getElementById('success-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
